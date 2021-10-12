@@ -10,13 +10,14 @@ export default class Document extends NextDocument {
     const originalRenderPage = ctx.renderPage;
     console.log(originalRenderPage);
     try {
-      ctx.renderPage = () =>
-        originalRenderPage({
-            enhanceApp: App => props =>
-              styledComponentSheet.collectStyles(
-                materialUiSheets.collect(<App {...props} />),
-              ),
-          });
+      ctx.renderPage = () => {
+        return originalRenderPage({
+          enhanceApp: App => props =>
+            styledComponentSheet.collectStyles(
+              materialUiSheets.collect(<App {...props} />),
+            ),
+        });
+      }
       const initialProps = await NextDocument.getInitialProps(ctx)
       return {
         ...initialProps,
