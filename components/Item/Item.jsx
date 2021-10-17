@@ -1,35 +1,17 @@
-import React, { useEffect } from 'react';
-import { Tooltip } from '@material-ui/core';
-import { getEmptyImage } from 'react-dnd-html5-backend';
-import ItemBlock from '../../styles/ItemBlock';
-import { useDrag } from 'react-dnd';
+import React from 'react'
+import { Tooltip } from '@material-ui/core'
+import ItemBlock from '../../styles/ItemBlock'
 
-const Item = ({ item }) => {
-    const [, dragRef, preview] = useDrag(
-        {
-            type: 'item',
-            item: {
-                payload: {
-                    ...item
-                }
-            },
-            collect: monitor => ({
-                isDragging: !!monitor.isDragging(),
-                monitor: monitor
-            })
-        },
-        []
-    );
-
-    useEffect(() => {
-        preview(getEmptyImage(), { captureDraggingState: false });
-    }, []);
-
+const Item = ({ item, itemRef }) => {
     return (
-        <Tooltip title={`${item.name} | ${item.rarity}*`} rarity={item.rarity?.toString() || ''}>
-            <ItemBlock ref={dragRef} src={item.image} />
+        <Tooltip title={`${item.name} | ${item.rarity}*`}>
+            <ItemBlock
+                ref={itemRef}
+                src={item.image}
+                rarity={item.rarity?.toString() || ''}
+            />
         </Tooltip>
-    );
-};
+    )
+}
 
-export default Item;
+export default Item

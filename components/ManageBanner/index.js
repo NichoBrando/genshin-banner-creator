@@ -1,3 +1,3 @@
-import ManageBanner from './ManageBanner';
+import ManageBanner from './ManageBanner'
 
-export default ManageBanner;
+export default ManageBanner

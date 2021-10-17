@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export default styled.div`
     position: fixed;
@@ -7,4 +7,4 @@ export default styled.div`
     visibility: hidden;
     top: 0;
     left: 0;
-`;
+`

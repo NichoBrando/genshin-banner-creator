@@ -1,9 +1,9 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export default styled.div`
     height: 10vh;
     width: 100vw;
-    background-color: #22243;
+    background-color: #222043;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -15,4 +15,4 @@ export default styled.div`
         width: 100px;
         flex-direction: column;
     }
-`;
+`

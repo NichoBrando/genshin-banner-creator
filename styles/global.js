@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from 'styled-components'
 
 export default createGlobalStyle`
     body {
@@ -8,4 +8,4 @@ export default createGlobalStyle`
         width: 100vw;
         background-color: #1D1F29;
     }
-`;
+`

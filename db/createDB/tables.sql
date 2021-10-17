@@ -3,6 +3,13 @@ CREATE DATABASE GIBannerCreator;
 
 USE GIBannerCreator;
 
+CREATE TABLE Banners (
+    id CHAR(36) NOT NULL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE,
+    startDay DATE NOT NULL,
+    endDay DATE NOT NULL
+);
+
 CREATE TABLE Items (
     id CHAR(36) NOT NULL PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE,
@@ -11,29 +18,21 @@ CREATE TABLE Items (
     image text
 );
 
-CREATE TABLE Characters (
-    id CHAR(36) NOT NULL PRIMARY KEY,
-    item_id CHAR(36) NOT NULL,
-    FOREIGN KEY (item_id) REFERENCES Items(id)
+CREATE TABLE BannerItems (
+    itemId CHAR(36) NOT NULL,
+    bannerId CHAR(36) NOT NULL,
+    FOREIGN KEY (itemId) REFERENCES Items(id),
+    FOREIGN KEY (bannerId) REFERENCES Banners(id)
 );
 
 CREATE TABLE Weapons (
     id CHAR(36) NOT NULL PRIMARY KEY,
-    item_id CHAR(36) NOT NULL,
-    FOREIGN KEY (item_id) REFERENCES Items(id)
+    itemId CHAR(36) NOT NULL,
+    FOREIGN KEY (itemId) REFERENCES Items(id)
 );
 
-CREATE TABLE Banners (
+CREATE TABLE Characters (
     id CHAR(36) NOT NULL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE,
-    start_day DATE NOT NULL,
-    end_day DATE NOT NULL
-);
-
-CREATE TABLE BannerItems (
-    id CHAR(36) NOT NULL PRIMARY KEY,
-    item_id CHAR(36) NOT NULL,
-    banner_id CHAR(36) NOT NULL,
-    FOREIGN KEY (item_id) REFERENCES Items(id),
-    FOREIGN KEY (banner_id) REFERENCES Banners(id)
+    itemId CHAR(36) NOT NULL,
+    FOREIGN KEY (itemId) REFERENCES Items(id)
 );
