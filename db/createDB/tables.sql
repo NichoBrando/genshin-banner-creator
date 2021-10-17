@@ -7,7 +7,8 @@ CREATE TABLE Banners (
     id CHAR(36) NOT NULL PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE,
     startDay DATE NOT NULL,
-    endDay DATE NOT NULL
+    endDay DATE NOT NULL,
+    description TEXT
 );
 
 CREATE TABLE Items (
@@ -21,6 +22,7 @@ CREATE TABLE Items (
 CREATE TABLE BannerItems (
     itemId CHAR(36) NOT NULL,
     bannerId CHAR(36) NOT NULL,
+    isLimited BOOLEAN DEFAULT 0,
     FOREIGN KEY (itemId) REFERENCES Items(id),
     FOREIGN KEY (bannerId) REFERENCES Banners(id)
 );
