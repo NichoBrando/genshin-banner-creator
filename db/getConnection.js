@@ -12,11 +12,10 @@ const getConnection = () => {
 
     const executeQuery = util.promisify(db.execute).bind(db)
     return async (query) => {
-        try{
+        try {
             const binaryRows = await executeQuery(query)
             return JSON.parse(JSON.stringify(binaryRows))
-        }
-        catch(err) {
+        } catch (err) {
             console.error(err)
         }
         return []

@@ -26,7 +26,7 @@ export async function getServerSideProps() {
     }
 
     const items = await getItemsFromDB(queryExecutor)
-    
+
     return {
         props: {
             items

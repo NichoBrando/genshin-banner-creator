@@ -51,7 +51,10 @@ export default function ManageBanner({ items }) {
                     toast.warn('Missing name')
                     return
                 }
-                if (!bannerData.items.length || !bannerData.items.some(item => item.isLimited)) {
+                if (
+                    !bannerData.items.length ||
+                    !bannerData.items.some((item) => item.isLimited)
+                ) {
                     toast.warn('Need to add at least one limited item')
                     return
                 }

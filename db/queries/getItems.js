@@ -1,4 +1,4 @@
-const getItemsFromDB = async(queryExecutor) => {
+const getItemsFromDB = async (queryExecutor) => {
     return await queryExecutor(`
         SELECT * FROM Items
         ORDER BY type ASC, rarity DESC ,name ASC

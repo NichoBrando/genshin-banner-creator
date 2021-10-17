@@ -21,9 +21,11 @@ export default async function createBanner(req, res) {
     const addedInTable = []
 
     try {
-        const result = await queryExecutor(`SELECT COUNT(name) as nameCount FROM Banners WHERE name = "${bannerData.name}"`)
+        const result = await queryExecutor(
+            `SELECT COUNT(name) as nameCount FROM Banners WHERE name = "${bannerData.name}"`
+        )
 
-        if(result[0]['nameCount']) {
+        if (result[0]['nameCount']) {
             res.status(400).json({
                 message: 'Name is already in use!'
             })
@@ -32,7 +34,9 @@ export default async function createBanner(req, res) {
 
         await queryExecutor(`
             INSERT INTO Banners (id, name, description, startDay, endDay) 
-            VALUES ("${id}", "${bannerData.name}", "${bannerData.description || ''}",
+            VALUES ("${id}", "${bannerData.name}", "${
+    bannerData.description || ''
+}",
             ${bannerData.startDay || null}, ${bannerData.endDay || null})
         `)
         addedInTable.push({ name: 'Banners', column: 'id' })
