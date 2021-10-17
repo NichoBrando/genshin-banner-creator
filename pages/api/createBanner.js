@@ -1,12 +1,19 @@
 import { v4 } from 'uuid'
 import getConnection from '../../db/getConnection'
 import Promise from 'bluebird'
+import validateBanner from '../../helpers/validators/validateBanner'
+import invalidData from '../../helpers/functions/invalidatData'
 
 let queryExecutor
 
 export default async function createBanner(req, res) {
-    const id = v4()
     const bannerData = req.body
+    if (!(await validateBanner(bannerData))) {
+        invalidData(res)
+        return
+    }
+
+    const id = v4()
 
     if (!queryExecutor) {
         queryExecutor = getConnection()
@@ -25,7 +32,7 @@ export default async function createBanner(req, res) {
 
         await queryExecutor(`
             INSERT INTO Banners (id, name, description, startDay, endDay) 
-            VALUES ("${id}", "${bannerData.name}", "${bannerData.description}",
+            VALUES ("${id}", "${bannerData.name}", "${bannerData.description || ''}",
             ${bannerData.startDay || null}, ${bannerData.endDay || null})
         `)
         addedInTable.push({ name: 'Banners', column: 'id' })
@@ -51,9 +58,7 @@ export default async function createBanner(req, res) {
                     DELETE FROM ${tableInfo.name} WHERE ${tableInfo.column} = "${id}"
                 `)
         })
-        res.status(400).json({
-            message: 'Invalid data!'
-        })
+        invalidData(res)
         return
     }
     res.status(200).json({

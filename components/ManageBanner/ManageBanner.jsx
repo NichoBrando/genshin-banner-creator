@@ -1,7 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
-import styled from 'styled-components'
-import { TextField, Button } from '@material-ui/core'
-import axios from 'axios'
+import React, { useState, useMemo, useCallback, useRef } from 'react'
 import { DraggableItem } from '../Item'
 import ItemList from '../../styles/ItemList'
 import DropItemBox from '../DropItemBox/DropItemBox'
@@ -10,12 +7,21 @@ import DropContainer from '../../styles/DropContainer'
 import BannerApi from '../../api/BannerApi'
 import { useLoading } from '../../hooks/Loading'
 import { toast } from 'react-toastify'
-import formatError from '../../helpers/formatError'
+import formatError from '../../helpers/functions/formatError'
+import validateBanner from '../../helpers/validators/validateBanner'
+import TitleSpan from '../../styles/TitleSpan'
+import TextInput from '../../styles/TextInput'
+import FormContainer from '../../styles/FormContainer'
+import TextAreaInput from '../../styles/TextAreaInput'
+import ContentContainer from '../../styles/ContentContainer'
+import BannerPropsContainer from '../../styles/BannerPropsContainer'
+import ActionButton from '../../styles/ActionButton'
+import TextInputContainer from '../../styles/TextInputContainer'
+import ActionsContainer from '../../styles/ActionsContainer'
 
-export default function ManageBanner() {
+export default function ManageBanner({ items }) {
     const { setShowLoading } = useLoading()
 
-    const [items, setItems] = useState([])
     const [selectedItems, setSelectedItems] = useState([])
     const bannerName = useRef('')
     const bannerDescription = useRef('')
@@ -32,14 +38,24 @@ export default function ManageBanner() {
     const saveBanner = async () => {
         try {
             const bannerData = {
-                name: bannerName.current,
-                description: bannerDescription.current,
+                name: (bannerName.current || '').trim(),
+                description: (bannerDescription.current || '').trim(''),
                 items: selectedItems.map((item) => ({
                     id: item.id,
                     isLimited: item.isLimited
                 }))
             }
             setShowLoading(true)
+            if (!(await validateBanner(bannerData))) {
+                if (!bannerData.name) {
+                    toast.warn('Missing name')
+                    return
+                }
+                if (!bannerData.items.length || !bannerData.items.some(item => item.isLimited)) {
+                    toast.warn('Need to add at least one limited item')
+                    return
+                }
+            }
             await BannerApi.createBanner(bannerData)
             toast.success('Banner successfully created!')
         } catch (err) {
@@ -48,12 +64,6 @@ export default function ManageBanner() {
             setShowLoading()
         }
     }
-
-    useEffect(() => {
-        axios.get('/api/getItems').then((res) => {
-            setItems(res.data)
-        })
-    }, [])
 
     const addItem = useCallback(
         (item, isLimited) => {
@@ -87,7 +97,7 @@ export default function ManageBanner() {
                         onChange={({ target }) => {
                             bannerName.current = target.value
                         }}
-                        bgColor='white'
+                        bgcolor='white'
                     />
                 </TextInputContainer>
 
@@ -104,7 +114,7 @@ export default function ManageBanner() {
 
             <ContentContainer>
                 <DropContainer>
-                    <Span>Limited Items</Span>
+                    <TitleSpan>Limited Items</TitleSpan>
                     <DropItemBox
                         items={limitedItems}
                         addItem={(item) => addItem(item, true)}
@@ -114,7 +124,7 @@ export default function ManageBanner() {
                 </DropContainer>
 
                 <DropContainer>
-                    <Span>General Items</Span>
+                    <TitleSpan>General Items</TitleSpan>
                     <DropItemBox
                         items={generalItems}
                         addItem={(item) => addItem(item, false)}
@@ -149,69 +159,3 @@ export default function ManageBanner() {
         </FormContainer>
     )
 }
-
-const Span = styled.span`
-    font-family: Roboto;
-    font-size: 18px;
-`
-
-const TextInput = styled(TextField)`
-    background: ${(props) => props.bgColor || 'none'};
-    width: 100%;
-`
-
-const TextAreaInput = styled(TextField)`
-    background-color: transparent;
-    width: 100%;
-`
-
-const FormContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100vh;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    box-sizing: border-box;
-`
-
-const ContentContainer = styled.div`
-    background-color: #c4c4c4;
-    width: 100%;
-    height: 40vh;
-    box-sizing: border-box;
-    padding: 10px;
-    overflow: auto;
-`
-
-const BannerPropsContainer = styled.div`
-    height: 10vh;
-    background-color: #c4c4c4;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 10px;
-    overflow: auto;
-    display: flex;
-    align-items: center;
-`
-
-const ActionButton = styled(Button)`
-    background-color: ${(props) => (props.isCancel ? '#ED2939' : '#1167b1')};
-    margin-right: 12.5px;
-
-    :hover {
-        background-color: ${(props) => props.isCancel ? '#8D021F' : '#03254c'};
-    }
-`
-
-const TextInputContainer = styled.div`
-    width: calc(100% - 200px);
-`
-
-const ActionsContainer = styled.div`
-    width: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`

@@ -10,8 +10,17 @@ const getConnection = () => {
         database: process.env.DB_NAME
     })
 
-    const query = util.promisify(db.execute).bind(db)
-    return query
+    const executeQuery = util.promisify(db.execute).bind(db)
+    return async (query) => {
+        try{
+            const binaryRows = await executeQuery(query)
+            return JSON.parse(JSON.stringify(binaryRows))
+        }
+        catch(err) {
+            console.error(err)
+        }
+        return []
+    }
 }
 
 module.exports = getConnection
