@@ -6,6 +6,7 @@ export default styled(Button)`
     margin-right: 12.5px;
 
     :hover {
-        background-color: ${(props) => props.isCancel ? '#8D021F' : '#03254c'};
+        background-color: ${(props) =>
+            props.isCancel ? '#8D021F' : '#03254c'};
     }
 `

@@ -1,6 +1,3 @@
-import getConnection from '../../db/getConnection'
-
-let queryExecutor
-export default async function getBanners(req, res) {
+export default async function getBanners() {
     // TODO ADD GET BANNER FUNCTIONALITY
 }

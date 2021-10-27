@@ -34,9 +34,7 @@ export default async function createBanner(req, res) {
 
         await queryExecutor(`
             INSERT INTO Banners (id, name, description, startDay, endDay) 
-            VALUES ("${id}", "${bannerData.name}", "${
-    bannerData.description || ''
-}",
+            VALUES ("${id}", "${bannerData.name}", "${bannerData.description || ''}",
             ${bannerData.startDay || null}, ${bannerData.endDay || null})
         `)
         addedInTable.push({ name: 'Banners', column: 'id' })

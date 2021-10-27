@@ -1,35 +1,35 @@
 import React from 'react'
 import Sidebar from './../components/Sidebar'
 import PageContainer from '../styles/PageContainer'
-import ManageBanner from '../components/ManageBanner'
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
 import getConnection from '../db/getConnection'
-import getItemsFromDB from '../db/queries/getItems'
+import getBanners from '../db/queries/getBanners'
+import BannerListManager from '../components/BannerListManager'
+import BannerManagerContainer from '../styles/BannerManagerContainer'
 
 let queryExecutor
 
-export default function Banner({ items }) {
+export default function CreateBanner({ banners }) {
+    console.log(banners)
     return (
         <PageContainer>
             <Sidebar />
-            <DndProvider backend={HTML5Backend}>
-                <ManageBanner items={items} />
-            </DndProvider>
+            <BannerManagerContainer>
+                <BannerListManager banners={banners} />
+            </BannerManagerContainer>
         </PageContainer>
     )
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
     if (!queryExecutor) {
         queryExecutor = getConnection()
     }
 
-    const items = await getItemsFromDB(queryExecutor)
-
+    const banners = await getBanners(queryExecutor)
     return {
         props: {
-            items
-        }
+            banners
+        },
+        revalidate: 60
     }
 }
