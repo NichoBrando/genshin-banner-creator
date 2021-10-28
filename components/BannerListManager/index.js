@@ -1,3 +1,3 @@
 import BannerListManager from './BannerListManager'
 
-export default BannerListManager;
+export default BannerListManager

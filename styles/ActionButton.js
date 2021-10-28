@@ -7,6 +7,6 @@ export default styled(Button)`
 
     :hover {
         background-color: ${(props) =>
-            props.isCancel ? '#8D021F' : '#03254c'};
+        props.isCancel ? '#8D021F' : '#03254c'};
     }
 `
